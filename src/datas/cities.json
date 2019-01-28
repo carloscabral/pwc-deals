@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "name": "Rio de Janeiro",
+        "state": "RJ"
+    },
+    {
+        "id": 2,
+        "name": "São Paulo",
+        "state": "SP"
+    },
+    {
+        "id": 3,
+        "name": "Santa Catarina",
+        "state": "SC"
+    },
+    {
+        "id": 4,
+        "name": "Minas Gerais",
+        "state": "MG"
+    },
+    {
+        "id": 5,
+        "name": "Espírito Santos",
+        "state": "ES"
+    }        
+  ]

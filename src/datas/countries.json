@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "name": "Brasil",
+        "continent": "América do Sul"
+    },
+    {
+        "id": 2,
+        "name": "Estados Unidos",
+        "continent": "América do Norte"
+    },
+    {
+        "id": 3,
+        "name": "Argentina",
+        "continent": "América do Sul"
+    }
+  ]
