@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid mt-4">
 
-    <md-button @click="newCountry" class="md-fab md-primary" style="position: fixed; right: 10px; bottom: 24px;">
+    <md-button @click="newState" class="md-fab md-primary" style="position: fixed; right: 10px; bottom: 24px;">
       <md-icon>add</md-icon>
     </md-button>    
 
@@ -103,13 +103,13 @@
       <md-table-empty-state
         md-label="Nenhum estado encontrado"
         :md-description="`A busca por '${search}' não retornou nenhum registro. Tente novamente ou adicione um novo.`">
-        <md-button class="md-primary md-raised" @click="newCountry">Adicionar estado</md-button>
+        <md-button class="md-primary md-raised" @click="newState">Adicionar estado</md-button>
       </md-table-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row slot="md-table-row" @click="tableClicked" slot-scope="{ item }">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Nome" md-sort-by="name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Continente" md-sort-by="continent">{{ item.continent }}</md-table-cell>
+        <md-table-cell md-label="Região" md-sort-by="region">{{ item.region }}</md-table-cell>
         <md-table-cell md-label="Ações">
         <md-menu md-direction="bottom-start">
           <md-button class="md-icon-button" md-menu-trigger>
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import my_data from "../datas/countries.json";
+import my_data from "../datas/states.json";
 import TopSection from "./TopSection";
 
 const toLower = text => {
@@ -145,7 +145,7 @@ const searchByTerm = (items, term) => {
 };
 
 export default {
-  name: "Countries",
+  name: "States",
   data: () => ({
     selectedState: [],
     selectedRegion: [],
@@ -154,8 +154,11 @@ export default {
     users: my_data
   }),
   methods: {
-    newCountry() {
-      this.$router.push("/paises/novo");
+    tableClicked() {
+      alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
+    },
+    newState() {
+      this.$router.push("/estados/novo");
     },
     searchOnTable() {
       this.searched = searchByTerm(this.users, this.search);

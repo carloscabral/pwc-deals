@@ -86,7 +86,7 @@
         <md-button class="md-primary md-raised" @click="newCountry">Adicionar países</md-button>
       </md-table-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row @click="tableClicked" slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Nome" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="Continente" md-sort-by="continent">{{ item.continent }}</md-table-cell>
@@ -134,6 +134,9 @@ export default {
     users: my_data
   }),
   methods: {
+    tableClicked() {
+      alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
+    },    
     newCountry() {
       this.$router.push("/paises/novo");
     },

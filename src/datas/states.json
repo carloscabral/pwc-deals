@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "name": "SP",
+        "region": "Sudeste"
+    },
+    {
+        "id": 2,
+        "name": "RJ",
+        "region": "Sudeste"
+    },
+    {
+        "id": 3,
+        "name": "RS",
+        "region": "Sul"
+    }
+  ]

@@ -11,8 +11,8 @@
             <md-button md-menu-trigger><md-icon style="font-size: 16px !important; margin-bottom: 3px">person</md-icon>&nbsp;Carlos - <small style="color: rgba(255,255,255,.7)">admin</small></md-button>
 
             <md-menu-content>
-              <md-menu-item>Editar</md-menu-item>
-              <md-menu-item>Sair</md-menu-item>
+              <md-menu-item @click="editProfile">Editar</md-menu-item>
+              <md-menu-item @click="logout">Sair</md-menu-item>
             </md-menu-content>
           </md-menu>
                   
@@ -94,6 +94,12 @@ export default {
   methods: {
     toggleMenu () {
       this.menuVisible = !this.menuVisible
+    },
+    editProfile() {
+      alert("Editar informações do usuário logado.")
+    },
+    logout() {
+      alert("Sair do sistema.")
     }
   }
 }

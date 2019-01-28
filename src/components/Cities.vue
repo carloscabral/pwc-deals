@@ -105,7 +105,7 @@
         <md-button class="md-primary md-raised" @click="newCity">Adicionar cidade</md-button>
       </md-table-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row slot="md-table-row" @click="tableClicked" slot-scope="{ item }">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Nome" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="Estado" md-sort-by="state">{{ item.state }}</md-table-cell>
@@ -153,6 +153,9 @@ export default {
     users: my_data
   }),
   methods: {
+    tableClicked() {
+      alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
+    },    
     newCity() {
       this.$router.push("/cidades/novo");
     },

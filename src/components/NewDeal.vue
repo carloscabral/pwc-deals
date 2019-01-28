@@ -101,37 +101,53 @@
                     <md-radio v-model="mainBuyer" value="yes" class="md-primary mt-2">Sim</md-radio>
                     <md-radio v-model="mainBuyer" value="no" class="md-primary mt-2">Não</md-radio>
                 </div>           
-            </div>                                                                                                 
+            </div> 
+            <md-button @click="save" class="md-primary md-raised ml-0 ml-md-5 mt-4 mb-4">Salvar</md-button>                                                                                                                
         </div>
       </div>
+
       <md-divider class="mt-4"></md-divider>
-      <div class="row align-items-start mt-4">
-        <md-divider class="mt-3"></md-divider>            
-        <div class="col-md-5">
+      
+      <div class="row align-items-start mt-4">       
+        <div class="col-md-4">
             <h3>Vendedor</h3>
             <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
         </div>
-        <div class="col-md-7">
-            conteúdo
+        <div class="col-md-8">
+            <strong>* Formulário de cadastro relacionado à Vendedor</strong>
         </div>
       </div>
-      <div class="row align-items-center mt-3">
-        <md-divider class="mt-3"></md-divider>            
-        <div class="col-md-5">
+      
+      <md-divider class="mt-4"></md-divider>
+
+      <div class="row align-items-start mt-4">
+        <div class="col-md-4">
             <h3>Transação</h3>
             <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
         </div>
-        <div class="col-md-7">
-            conteúdo
+        <div class="col-md-8">
+            <strong>* Formulário de cadastro relacionado à Transação</strong>
         </div>
-      </div>            
+      </div> 
+
+      <md-divider class="mt-4"></md-divider>
+      
+      <div class="row align-items-start mt-4">
+        <div class="col-md-4">
+            <h3>Empresa negociada</h3>
+            <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
+        </div>
+        <div class="col-md-8 d-flex-column">
+            <strong>* Formulário de cadastro relacionado à Empresa negociada</strong>        
+        </div>
+      </div>
+
      
   </div>
 
 </template>
 
 <script>
-import my_data from "../datas/deals.json";
 
 const toLower = text => {
   return text.toString().toLowerCase();
@@ -177,24 +193,19 @@ export default {
     ]
   }),
   methods: {
-    newTransaction() {
-      window.alert("Noop");
-    },
-    searchOnTable() {
-      this.searched = searchByTerm(this.transactions, this.search);
+    save() {
+      this.$router.push("/transacoes")
+      alert("Transação salva com sucesso")        
     }
   },
   watch: {
-    countryGroup(newValue, oldValue) {
+    countryGroup(newValue) {
     
         (newValue.toLowerCase().trim() === "brasil") 
             ? this.sourceOrigin = "national" 
             : this.sourceOrigin = "multinational"
         
-    },
-  },
-  created() {
-    this.searched = this.transactions;
+    }
   }
 };
 </script>

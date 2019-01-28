@@ -86,7 +86,7 @@
         <md-button class="md-primary md-raised" @click="newUser">Novo usuário</md-button>
       </md-table-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row slot="md-table-row" @click="tableClicked" slot-scope="{ item }">
         <md-table-cell md-label="Número" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Nome" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell md-label="E-mail" md-sort-by="email">{{ item.email }}</md-table-cell>
@@ -100,7 +100,7 @@
 
           <md-menu-content class="table-pop-up">
             <md-menu-item @click="editItem(item.id)"><md-icon>edit</md-icon><span>Editar</span></md-menu-item>
-            <md-menu-item @click="editItem(item.id)"><md-icon>delete</md-icon><span>Excluir</span></md-menu-item>
+            <md-menu-item @click="removeItem(item.id)"><md-icon>delete</md-icon><span>Excluir</span></md-menu-item>
           </md-menu-content>
           
         </md-menu>
@@ -136,6 +136,9 @@ export default {
     users: my_data
   }),
   methods: {
+    tableClicked() {
+      alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
+    },    
     newUser() {
       this.$router.push("/usuarios/novo");
     },

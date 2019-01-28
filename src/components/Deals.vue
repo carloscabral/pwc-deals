@@ -107,7 +107,7 @@
         <md-button class="md-primary md-raised" @click="newDeal">Nova transação</md-button>
       </md-table-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row slot="md-table-row" @click="tableClicked" slot-scope="{ item }">
         <md-table-cell md-label="N° Transação" md-sort-by="dealNumber">{{ item.dealNumber }}</md-table-cell>
         <md-table-cell md-label="Data" md-sort-by="dealDate">{{ item.dealDate }}</md-table-cell>   
         <md-table-cell md-label="Tipo Transação" md-sort-by="dealType">
@@ -190,6 +190,9 @@ export default {
     deals: my_data
   }),
   methods: {
+    tableClicked() {
+      alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
+    },    
     searchOnTable() {
       this.searched = searchByTerm(this.deals, this.search);
     },
