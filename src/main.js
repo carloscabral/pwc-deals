@@ -3,13 +3,16 @@ import App from './App.vue'
 
 import VueRouter from 'vue-router'
 import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.min.css'
+// import Vuetify from 'vuetify'
+import 'vue-material/dist/vue-material.min.css';
+// import 'vuetify/dist/vuetify.min.css'
 // import 'vue-material/dist/theme/default.css'
 
 import { routes } from './routes';
 
 Vue.use(VueMaterial)
 Vue.use(VueRouter)
+// Vue.use(Vuetify)
 
 Vue.config.productionTip = false
 

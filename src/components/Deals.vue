@@ -1,4 +1,5 @@
 <template>
+
   <div class="container-fluid mt-4">
 
     <md-button @click="newDeal" class="md-fab md-primary" style="position: fixed; right: 10px; bottom: 24px;">
@@ -7,11 +8,9 @@
 
     <TopSection title="Transações" @print="printList" @export="exportList" />
 
-    <div class="space"></div>
+    <div class="space"></div>  
 
-    <form class="mb-3">
-      <fieldset>
-        <legend>Personalizar listagem:</legend>
+    <Accordion>
         <div class="row">
           <div class="col-md-4 col-sm-6">
             <md-field>
@@ -69,8 +68,7 @@
           </div>
 
         </div>
-      </fieldset>
-    </form>
+    </Accordion>
 
     <div class="row align-items-center">
       <div class="col-md-7 d-lg-flex align-items-center">
@@ -163,6 +161,9 @@
 <script>
 import my_data from "../datas/deals.json";
 import TopSection from "./TopSection";
+import Accordion from "./Accordion";
+// import multiSelect from 'vue-multi-select';
+// import 'vue-multi-select/dist/lib/vue-multi-select.min.css'
 
 const toLower = text => {
   return text.toString().toLowerCase();
@@ -171,16 +172,20 @@ const toLower = text => {
 const searchByTerm = (items, term) => {
   if (term) {
     return items.filter(item =>
-      toLower(item.buyerCompany).includes(toLower(term))
+      toLower(item.buyerCompany).includes(toLower(term)) || 
+      toLower(item.sellerCompany).includes(toLower(term)) ||
+      toLower(item.dealedCompany).includes(toLower(term))
     );
   }
+
   return items;
 };
 
 export default {
   name: "Deals",
   data: () => ({
-    selectedBuyers: [],
+    items: ['Foo', 'Bar', 'Fizz', 'Buzz'],    
+    selectedBuyers: [ { name: 'Comprador 1' }, { name: 'Comprador 2' }, { name: 'Comprador 3' }, { name: 'Comprador 4' }, { name: 'Comprador 5' } ],
     selectedSellers: [],
     selectedDealed: [],
     selectedFirstDate: new Date(),
@@ -213,13 +218,13 @@ export default {
       if (result == true) {
         alert("Transação de número " + args + " seria removida com essa ação.")
       }
-    }        
+    }     
   },
   created() {
     this.searched = this.deals;
   },
   components: {
-    TopSection
+    TopSection, Accordion
   }
 };
 </script>
