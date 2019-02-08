@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid mt-4">
+    <!-- <div class="container-fluid mt-4">
         <div class="align-items-center justify-content-between" style="display: flex;">
             <h1 class="mb-0 mr-md-4">Dashboard</h1>
             <md-button @click="openPowerBI" class="md-primary md-raised d-flex justify-content-end">Ver no Power BI</md-button>
@@ -7,7 +7,8 @@
         <div class="row">
             <div class="power-bi mt-3"></div>
         </div>
-    </div>    
+    </div>     -->
+    <div>Página do dashboard (to-do)</div>
 </template>
 <script>
 export default {

@@ -1,18 +1,22 @@
 import Vue from 'vue'
 import App from './App.vue'
-
-import VueRouter from 'vue-router'
-import VueMaterial from 'vue-material'
-// import Vuetify from 'vuetify'
-import 'vue-material/dist/vue-material.min.css';
-// import 'vuetify/dist/vuetify.min.css'
-// import 'vue-material/dist/theme/default.css'
-
 import { routes } from './routes';
 
-Vue.use(VueMaterial)
+import VueRouter from 'vue-router'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+
+import colors from 'vuetify/es5/util/colors'
+
 Vue.use(VueRouter)
-// Vue.use(Vuetify)
+
+Vue.use(Vuetify, {
+  theme: {
+    primary: colors.orange.darken3,
+    secondary: colors.red.lighten4, // #FFCDD2
+    accent: colors.indigo.base // #3F51B5    
+  }
+})
 
 Vue.config.productionTip = false
 

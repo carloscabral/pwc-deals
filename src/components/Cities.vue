@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid mt-4">
+  <!-- <div class="container-fluid mt-4">
 
     <md-button @click="newCity" class="md-fab md-primary" style="position: fixed; right: 10px; bottom: 24px;">
       <md-icon>add</md-icon>
@@ -124,7 +124,8 @@
         </md-table-cell>
       </md-table-row>
     </md-table>      
-  </div>
+  </div> -->
+  <div>Página com lista de cidades (to-do)</div>
 
 </template>
 

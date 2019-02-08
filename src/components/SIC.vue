@@ -1,3 +1,3 @@
 <template>
-    <div style="min-height: 75vh;"><strong>Listagem de SIC com estrutura similar às demais listagens do sistema.</strong></div>
+    <div>Página com lista de SIC (to-do)</div>
 </template>

@@ -4,7 +4,7 @@
       <fieldset style="position: relative;">
         <legend>Personalizar listagem:</legend>
         <div class="collapse-icon" :class="{ 'not-expanded': !this.expanded }" @click="toggleCardState">
-          <md-icon>expand_more</md-icon>
+          <v-icon width="24" height="24">expand_more</v-icon>
         </div>
         <div class="option-content" :class="{ 'not-expanded': !this.expanded }">
             <slot />
