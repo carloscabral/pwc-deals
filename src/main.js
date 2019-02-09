@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 
 Vue.use(Vuetify, {
   theme: {
-    primary: colors.orange.darken3,
+    primary: colors.amber.darken4,
     secondary: colors.red.lighten4, // #FFCDD2
     accent: colors.indigo.base // #3F51B5    
   }
@@ -21,7 +21,7 @@ Vue.use(Vuetify, {
 Vue.config.productionTip = false
 
 const router = new VueRouter({
-  //mode: 'history',
+  mode: 'history',
   routes,
   scrollBehavior() {
     return { x: 0, y: 0 }    

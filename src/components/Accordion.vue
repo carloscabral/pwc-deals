@@ -1,6 +1,6 @@
 <template>
     
-    <form class="mb-3">
+    <form class="mb-3 pa-2">
       <fieldset style="position: relative;">
         <legend>Personalizar listagem:</legend>
         <div class="collapse-icon" :class="{ 'not-expanded': !this.expanded }" @click="toggleCardState">

@@ -1,30 +1,12 @@
-@import "pwc-theme";
 @import "vendors/bootstrap";
 
 
-.md-app {
-    min-height: 350px;
-    border: 1px solid rgba(#000, .12);
-}
-
-.md-drawer {
-    max-width: 13.5rem !important;
-}
-
-.md-list-item :hover:not(span, i) {
-    background-color: rgba(0, 0, 0, .06);
-    transition: all .35s;
-    cursor: pointer;
-}
-
-.md-icon .md-title {
-    color: #fff !important;
-}
+$primary-color: #FF6F00;
 
 fieldset {
-  border: 1px solid rgba(0,0,0,.12); 
+  border: 1px solid rgba(0, 0, 0, .12);
   padding: 1.5rem;
-  
+
   legend {
     width: auto;
     font-size: 12px;
@@ -36,105 +18,64 @@ fieldset {
   }
 }
 
-.search-box i {
-  margin-right: .5rem;
+.space {
+  height: 1px;
+  margin-bottom: 1.5rem;
 }
 
-.table-pop-up {
-  width: 8rem;
-  justify-content: flex-start !important;
+footer {
+  padding: 1rem;
 
-  .md-list-item-content {
-    justify-content: flex-start !important;
-  }
-  
-  i {
-    margin-right: .5rem !important;
-    font-size: 16px !important;
-  }
-
-  span {
-    font-size: 14px;
+  p {
+    font-size: .8rem;
+    line-height: 1.5rem;
+    margin-bottom: 0;
+    color: rgba(0, 0, 0, .54);
   }
 }
 
-.top-title {
-    line-height: 1.33;
-  }
-  
-  .top-section > * {
-    &__title {
-      display: inline;
-    }
-  
-    &__search-box {
-      input {
-        width: 16rem;
-        margin-right: 3rem;
-      }
-    }
-  }
-  
-  .arrow-container {
-    width: 32px;
-    height: 32px;
-    background-color: #eee;
-    align-self: center;
-  
-    &:first-child {
-      margin-right: 2px;
-    }
-  
-    &:hover {
-      cursor: pointer;
-    }
-  
-    .md-icon {
-      display: flex;
-      align-self: center;
-      margin-top: 0.25rem;
-    }
-  }
-  .md-field {
-    max-width: 300px;
-  }
-  
-  .more-options {
-    cursor: pointer;
-  }
-  
-  .space {
-    height: 1px;
-    margin-bottom: 1.5rem;
-  }
-  
-  .date-label {
-    color: rgba(0,0,0,.54); 
-    font-size: 12px; 
+button {
+  outline: none !important;
+}
+
+.v-input--radio-group {
+  margin-top: .4rem !important;
+  label {
+    font-size: 1rem;
     margin-bottom: 0;
   }
+}
 
-  .td-subtitle {
-    color: rgba(0,0,0,.5); 
-    font-size: .75rem;
-  }
+.radio-label {
+  color: rgba(0,0,0,.54);
+  font-size: .85rem;
+  margin-top: .28rem;
+}
 
-  footer {
-    padding: 1rem;
-    p {
-      font-size: .75rem;
-      line-height: 1.5rem;
-      margin-bottom: 0;
-      color: rgba(0,0,0,.54);
+.dimmed {
+  opacity: .45;
+}
+
+.colored-shadow {
+  box-shadow: 0 20px 20px -10px rgba($primary-color, .3) !important;
+}
+
+.v-pagination__item {
+    //@extend .colored-shadow;
+    box-shadow: 0 12px 20px -10px rgba(rgba(0,0,0,.4), .35) !important;
+    &--active{
+      box-shadow: 0 20px 20px -10px rgba($primary-color, .35) !important;
     }
-  }
+}
 
-  .md-table-content {
-    height: auto !important;
-    min-height: 300px !important;
-  }
+.v-list a {
+  text-decoration: none !important;
 
-  .option-label {
-    font-size: .75rem;
-    color: rgba(0,0,0,.54);
+  &:hover {
+    color: $primary-color;
   }
+}
+
+.v-avatar * {
+  border-radius: 0 !important;
+}
