@@ -11,6 +11,7 @@ import Countries from './components/Countries.vue'
 import States from './components/States.vue'
 import Cities from './components/Cities.vue'
 import SIC from './components/SIC.vue'
+import Approvements from './components/Approvements.vue'
 
 
 export const routes = [
@@ -27,5 +28,6 @@ export const routes = [
         { path: '/estados', component: States },
         { path: '/cidades', component: Cities },
         { path: '/SIC', component: SIC },
+        { path: '/aprovacoes', component: Approvements },
     ]}
 ]

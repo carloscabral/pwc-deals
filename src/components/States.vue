@@ -1,137 +1,111 @@
 <template>
-  <!-- <div class="container-fluid mt-4">
 
-    <md-button @click="newState" class="md-fab md-primary" style="position: fixed; right: 10px; bottom: 24px;">
-      <md-icon>add</md-icon>
-    </md-button>    
+  <v-card class="pa-4 mx-sm-4">
 
     <TopSection title="Estados" @print="printList" @export="exportList" />
 
-    <div class="space"></div>
+    <Accordion>
 
-    <form class="mb-3">
-      <fieldset>
-        <legend>Personalizar listagem:</legend>
-          <div class="row">
-            <div class="col-md-4 col-sm-6">
-              <md-field>
-                <label for="state">Estado</label>
-                <md-select v-model="selectedState" name="state" id="state" multiple md-dense>             
-                  <md-option value="state1">AC</md-option>
-                  <md-option value="state2">AL</md-option>
-                  <md-option value="state3">AP</md-option>
-                  <md-option value="state4">AM</md-option>
-                  <md-option value="state5">BA</md-option>
-                  <md-option value="state6">CE</md-option>
-                  <md-option value="state7">DF</md-option>
-                  <md-option value="state1">ES</md-option>
-                  <md-option value="state2">GO</md-option>
-                  <md-option value="state3">MA</md-option>
-                  <md-option value="state4">MT</md-option>
-                  <md-option value="state5">MS</md-option>
-                  <md-option value="state6">MG</md-option>
-                  <md-option value="state7">PA</md-option>
-                  <md-option value="state1">PB</md-option>
-                  <md-option value="state2">PR</md-option>
-                  <md-option value="state3">PE</md-option>
-                  <md-option value="state4">PI</md-option>
-                  <md-option value="state5">RJ</md-option>
-                  <md-option value="state6">RN</md-option>
-                  <md-option value="state7">RS</md-option>
-                  <md-option value="state1">RO</md-option>
-                  <md-option value="state2">RR</md-option>
-                  <md-option value="state3">SC</md-option>
-                  <md-option value="state4">SP</md-option>
-                  <md-option value="state5">SE</md-option>
-                  <md-option value="state6">TO</md-option>
-                </md-select>
-              </md-field>        
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <md-field>
-                <label for="region">Região</label>
-                <md-select v-model="selectedRegion" name="region" id="region" multiple md-dense>
-                  <md-option value="region1">Ásia</md-option>
-                  <md-option value="region2">Europa</md-option>
-                  <md-option value="region3">África</md-option>
-                  <md-option value="region4">América do Norte</md-option>
-                  <md-option value="region5">América do Sul</md-option>
-                  <md-option value="region6">América Central</md-option>
-                  <md-option value="region7">Oceania</md-option>
-                </md-select>
-              </md-field>         
-            </div>
+      <v-layout row wrap class="p-3">        
 
-            <div class="col-md-4 col-sm-6">
-                <md-button class="md-primary ml-0 md-raised" style="margin-top: 16px">Listar estados</md-button>
-            </div>    
-          </div>
-      </fieldset>
-    </form>
+        <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
+          <v-select v-model="selectedName" :items="getName" label="Nome" multiple dense>
+            <template slot="selection" slot-scope="{ item, index }">
+              <v-chip small v-if="index === 0">
+                <span>{{ item }}</span>
+              </v-chip>
+              <span v-if="index === 1" class="grey--text caption">(+{{ selectedName.length - 1 }})</span>
+            </template>              
+            <v-list-tile slot="prepend-item" ripple @click="toggleAll('name')">
+              <v-list-tile-action>
+                <v-icon :color="selectedName.length > 0 ? 'primary' : ''">{{ iconName }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Selecionar todos</v-list-tile-title>
+            </v-list-tile>
+            <v-divider slot="prepend-item" class="mt-2"></v-divider>
+          </v-select>
+        </v-flex>
 
-    <md-divider class="mt-4 mb-3"></md-divider>
+        <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
+          <v-select v-model="selectedRegion" :items="getRegion" label="Região" multiple dense>
+            <template slot="selection" slot-scope="{ item, index }">
+              <v-chip small v-if="index === 0">
+                <span>{{ item }}</span>
+              </v-chip>
+              <span v-if="index === 1" class="grey--text caption">(+{{ selectedRegion.length - 1 }})</span>
+            </template>              
+            <v-list-tile slot="prepend-item" ripple @click="toggleAll('region')">
+              <v-list-tile-action>
+                <v-icon :color="selectedRegion.length > 0 ? 'primary' : ''">{{ iconRegion }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Selecionar todos</v-list-tile-title>
+            </v-list-tile>
+            <v-divider slot="prepend-item" class="mt-2"></v-divider>
+          </v-select>
+        </v-flex>
 
-    <div class="row align-items-center">
-      <div class="col-md-7 d-lg-flex align-items-center">
-        <div class="search-box d-flex" style="width: 15rem;">
-            <md-icon class="icon-search">search</md-icon>
-            <md-field>
-              <md-input v-model="search" placeholder="Pesquisar por país..." @input="searchOnTable" />
-            </md-field>
-        </div>
+        <v-flex xs12 sm6 md4 lg3 class="px-sm-4 mt-2">
+          <v-btn class="colored-shadow" :disabled="dialog" :loading="dialog" color="primary mx-0" @click="dialog = true">Listar Estados</v-btn>
+          <v-dialog v-model="dialog" hide-overlay persistent width="300">
+            <v-card color="primary" dark>
+              <v-card-text>
+                Por favor, aguarde...
+                <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+              </v-card-text>
+            </v-card>
+          </v-dialog>          
+        </v-flex>
 
-      </div>
-      <div class="col-md-5 d-flex flex-md-row-reverse mt-3">
-        <div class="pagination d-flex align-items-center">
-          <p class="mb-0">Mostrando <strong>{{ users.length }}</strong> de <strong>{{ users.length + users.length }}</strong></p>
-          <div class="arrows d-flex align-items-center ml-2">
-            <div class="arrow-container">
-              <md-icon>arrow_left</md-icon>
-            </div>
-            <div class="arrow-container">
-              <md-icon>arrow_right</md-icon>
-            </div>          
+      </v-layout>
+    </Accordion>
+
+    <div class="deals-table mb-2" style="position: relative">
+      
+      <v-card-title>
+        <v-text-field style="max-width: 14rem;" v-model="search" append-icon="search" label="Buscar na listagem" single-line hide-details></v-text-field>
+      </v-card-title>
+
+      <v-data-table :headers="headers" :items="states" :search="search" hide-actions :pagination.sync="pagination">
+        <template slot="items" slot-scope="props">
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.id }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.name }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.region }}</td>
+          <td class="justify-space-around layout px-0">
+            <v-icon small class="mr-2" @click="editItem(props.item.id)">edit</v-icon>
+            <v-icon small @click="removeItem(props.item.id)">delete</v-icon>
+          </td>
+        </template>
+        <div slot="no-results">
+          <div class="empty-state">
+            <v-icon>search</v-icon>
+            <h1>Nenhum item encontrado</h1>
+            <p>A busca por '{{ search }}' não retornou nenhum registro. Tente novamente ou crie um novo.</p>
           </div>
         </div>
-      </div>
-    </div>        
+      </v-data-table>
+      <small>&bull;&nbsp;As linhas com aparência esmaecida representam rascunhos.</small>
 
-    <div class="space"></div>
+      <v-tooltip left>
+        <v-btn slot="activator" class="colored-shadow" style="margin-right: -1.5rem; margin-top: 3rem;" absolute dark fab top right color="primary">
+          <v-icon>add</v-icon>
+        </v-btn>
+        <span>Novo Estado</span>
+      </v-tooltip> 
 
-    <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-fixed-header>
+      <div class="text-xs-right pt-2 my-3">
+        <v-pagination circle style="outline: none" v-model="pagination.page" :length="pages"></v-pagination>
+      </div>               
 
-      <md-table-empty-state
-        md-label="Nenhum estado encontrado"
-        :md-description="`A busca por '${search}' não retornou nenhum registro. Tente novamente ou adicione um novo.`">
-        <md-button class="md-primary md-raised" @click="newState">Adicionar estado</md-button>
-      </md-table-empty-state>
+    </div>
 
-      <md-table-row slot="md-table-row" @click="tableClicked" slot-scope="{ item }">
-        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-        <md-table-cell md-label="Nome" md-sort-by="name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Região" md-sort-by="region">{{ item.region }}</md-table-cell>
-        <md-table-cell md-label="Ações">
-        <md-menu md-direction="bottom-start">
-          <md-button class="md-icon-button" md-menu-trigger>
-            <md-icon>more_vert</md-icon>
-          </md-button>
+  </v-card>
 
-          <md-menu-content class="table-pop-up">
-            <md-menu-item @click="editItem(item.id)"><md-icon>edit</md-icon><span>Editar</span></md-menu-item>
-            <md-menu-item @click="removeItem(item.id)"><md-icon>delete</md-icon><span>Excluir</span></md-menu-item>
-          </md-menu-content>
-          
-        </md-menu>
-        </md-table-cell>
-      </md-table-row>
-    </md-table>      
-  </div> -->
-  <div>Página com lista de estados (to-do)</div>
 </template>
 
 <script>
 import my_data from "../datas/states.json";
 import TopSection from "./TopSection";
+import Accordion from "./Accordion";
 
 const toLower = text => {
   return text.toString().toLowerCase();
@@ -147,22 +121,26 @@ const searchByTerm = (items, term) => {
 export default {
   name: "States",
   data: () => ({
-    selectedState: [],
     selectedRegion: [],
-    search: null,
-    searched: [],
-    users: my_data
+    selectedName: [],
+    search: "",
+    dialog: false,
+    pagination: {},    
+    states: my_data,
+    headers: [
+      { text: "Número", align: "left", value: "id" },
+      { text: "Nome", value: "name" },
+      { text: "Região", value: "region" },
+      { text: "Ações", value: "" }      
+    ]
   }),
   methods: {
     tableClicked() {
       alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
-    },
-    newState() {
-      this.$router.push("/estados/novo");
-    },
-    searchOnTable() {
-      this.searched = searchByTerm(this.users, this.search);
-    },
+    },    
+    // newCountry() {
+    //   this.$router.push("/paises/novo");
+    // },
     printList() {
       alert("Relatório será impresso.")
     },
@@ -170,20 +148,83 @@ export default {
       alert("Relatório será exportado para excel.")
     },
     editItem(args) {
-      alert("Entra em modo de edição do estado: " + args)
+      alert("Entra em modo de edição do país: " + args)
     },
     removeItem(args) {
       let result = confirm("Tem certeza que deseja excluir esse registro?")
       if (result == true) {
-        alert("Estado de número " + args + " seria removido com essa ação.")
+        alert("País de número " + args + " seria removido com essa ação.")
       }
-    }    
+    },
+    toggleAll(params) {
+      this.$nextTick(() => {
+        switch (params) {
+          case "name":
+            this.selectAllNames
+              ? (this.selectedName = [])
+              : (this.selectedName = this.getName.slice());
+            break;
+          case "region":
+            this.selectAllRegions
+              ? (this.selectedRegion = [])
+              : (this.selectedRegion = this.getRegion.slice());
+            break;
+          default:
+        }
+      });
+    }          
   },
-  created() {
-    this.searched = this.users;
+  computed: {
+    getName() {
+      return [...new Set(this.states.map(({ name }) => name).sort())];
+    },
+    getRegion() {
+      return [...new Set(this.states.map(({ region }) => region).sort())];
+    },
+    selectAllNames() {
+      return this.selectedName.length === this.getName.length;
+    },
+    selectSomeNames() {
+      return this.selectedName.length > 0 && !this.selectAllNames;
+    },
+    selectAllRegions() {
+      return this.selectedRegion.length === this.getRegion.length;
+    },
+    selectSomeRegions() {
+      return this.selectedRegion.length > 0 && !this.selectAllRegions;
+    },    
+    iconName() {
+      if (this.selectAllNames) return "check_box";
+      if (this.selectSomeNames) return "indeterminate_check_box";
+      return "check_box_outline_blank";
+    },
+    iconRegion() {
+      if (this.selectAllRegions) return "check_box";
+      if (this.selectSomeRegions) return "indeterminate_check_box";
+      return "check_box_outline_blank";
+    },
+    // Custom pagination
+    pages() {
+      if (
+        this.pagination.rowsPerPage == null ||
+        this.pagination.totalItems == null
+      )
+        return 0;
+      return Math.ceil(
+        this.pagination.totalItems / this.pagination.rowsPerPage
+      );
+    }
+  },
+  watch: {
+    dialog (val) {
+      if (!val) return
+
+      setTimeout(() => (this.dialog = false), 4000)
+    }
   },
   components: {
-    TopSection
+    TopSection,
+    Accordion
   }   
 };
 </script>

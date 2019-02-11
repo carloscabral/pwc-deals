@@ -197,9 +197,11 @@
           </td>
         </template>
         <div slot="no-results">
-          <v-layout row wrap class="p-3">
-            <h4 class="align-center align-content-start d-flex mt-2"><v-icon color="primary">error_outline</v-icon>&nbsp;Nenhum resultado encontrado! Toque no botão para adicionar uma nova transação.</h4>
-          </v-layout>
+          <div class="empty-state">
+            <v-icon>search</v-icon>
+            <h1>Nenhum item encontrado</h1>
+            <p>A busca por '{{ search }}' não retornou nenhum registro. Tente novamente ou crie um novo.</p>
+          </div>
         </div>
       </v-data-table>
       <small>&bull;&nbsp;As linhas com aparência esmaecida representam rascunhos.</small>
@@ -473,6 +475,5 @@ export default {
 </script>
 
 <style lang="scss">
-
 
 </style>

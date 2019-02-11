@@ -4,7 +4,10 @@
 
     <!-- Main app toolbar -->
     <v-toolbar class="colored-shadow" color="primary" dark fixed app clipped-right>
-      <v-toolbar-side-icon class="hidden-sm-and-down" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <div class="hidden-sm-and-down">
+        <v-icon v-if="!drawer" @click.stop="drawer = !drawer">menu</v-icon>
+        <v-icon v-if="drawer" @click.stop="drawer = !drawer">close</v-icon>
+      </div>
       <v-toolbar-title>Base de transações</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
@@ -54,37 +57,39 @@
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile>
       
-          <v-list-group v-if="!mini" 
-            v-for="item in menuGroupItems" 
-            :key="item.title" 
-            v-model="item.active" 
-            :prepend-icon="item.action" 
-            no-action>
-            
-            <v-list-tile slot="activator">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+          <div v-if="!mini">
+            <v-list-group 
+              v-for="item in menuGroupItems" 
+              :key="item.title" 
+              v-model="item.active" 
+              :prepend-icon="item.action" 
+              no-action>
+              
+              <v-list-tile slot="activator">
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
 
-            <v-list-tile
-              v-for="(item, index) in menuGroupItems[0].subItems"
-              :key="index"
-              :to="item.path">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
+              <v-list-tile
+                v-for="(item, index) in menuGroupItems[0].subItems"
+                :key="index"
+                :to="item.path">
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile-content>
 
-            </v-list-tile>            
+              </v-list-tile>            
 
-          </v-list-group>
+            </v-list-group>
+          </div>
 
         </v-list>
 
     </v-navigation-drawer>
 
     <!-- Right drawer navigation -->
-    <v-navigation-drawer class="hidden-md-and-up" v-model="drawerRight" temporary right fixed clipped app>
+    <v-navigation-drawer class="hidden-md-and-up" v-model="drawerRight" temporary right fixed clipped app>  
 
       <v-list class="pa-1">
 
@@ -150,13 +155,15 @@
 
     <!-- Main app content -->
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout row>
-          <v-flex xs12>
-            <router-view></router-view>
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <main>
+        <v-container fluid fill-height>
+          <v-layout row>
+            <v-flex xs12>
+              <router-view></router-view>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </main>
     </v-content>
 
     <!-- Main app footer -->

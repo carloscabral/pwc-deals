@@ -1,119 +1,113 @@
 <template>
-  <!-- <div class="container-fluid mt-4">
 
-    <md-button @click="newUser" class="md-fab md-primary" style="position: fixed; right: 10px; bottom: 24px;">
-      <md-icon>add</md-icon>
-    </md-button>    
+  <v-card class="pa-4 mx-sm-4">
 
     <TopSection title="Usuários" @print="printList" @export="exportList" />
 
-    <div class="space"></div>
+    <Accordion>
 
-    <form class="mb-3">
-      <fieldset>
-        <legend>Personalizar listagem:</legend>
-        <div class="row">
-          <div class="col-md-4 col-sm-6">
-            <md-field>
-              <label for="name">Nome</label>
-              <md-select v-model="selectedNames" name="name" id="name" multiple md-dense>
-                <md-option value="nome1">Nome 1</md-option>
-                <md-option value="nome2">Nome 2</md-option>
-                <md-option value="nome3">Nome 3</md-option>
-                <md-option value="nome4">Nome 4</md-option>
-                <md-option value="nome5">Nome 5</md-option>
-                <md-option value="nome6">Nome 6</md-option>
-                <md-option value="nome7">Nome 7</md-option>
-              </md-select>
-            </md-field>        
+      <v-layout row wrap class="p-3">        
+
+        <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
+          <v-select v-model="selectedName" :items="getName" label="Nome" multiple dense>
+            <template slot="selection" slot-scope="{ item, index }">
+              <v-chip small v-if="index === 0">
+                <span>{{ item }}</span>
+              </v-chip>
+              <span v-if="index === 1" class="grey--text caption">(+{{ selectedName.length - 1 }})</span>
+            </template>              
+            <v-list-tile slot="prepend-item" ripple @click="toggleAll('name')">
+              <v-list-tile-action>
+                <v-icon :color="selectedName.length > 0 ? 'primary' : ''">{{ iconName }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Selecionar todos</v-list-tile-title>
+            </v-list-tile>
+            <v-divider slot="prepend-item" class="mt-2"></v-divider>
+          </v-select>
+        </v-flex>
+
+        <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
+          <v-select v-model="selectedProfile" :items="getProfile" label="Perfil" multiple dense>
+            <template slot="selection" slot-scope="{ item, index }">
+              <v-chip small v-if="index === 0">
+                <span>{{ item }}</span>
+              </v-chip>
+              <span v-if="index === 1" class="grey--text caption">(+{{ selectedProfile.length - 1 }})</span>
+            </template>              
+            <v-list-tile slot="prepend-item" ripple @click="toggleAll('profile')">
+              <v-list-tile-action>
+                <v-icon :color="selectedProfile.length > 0 ? 'primary' : ''">{{ iconProfile }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>Selecionar todos</v-list-tile-title>
+            </v-list-tile>
+            <v-divider slot="prepend-item" class="mt-2"></v-divider>
+          </v-select>
+        </v-flex>
+
+        <v-flex xs12 sm6 md4 lg3 class="px-sm-4 mt-2">
+          <v-btn class="colored-shadow" :disabled="dialog" :loading="dialog" color="primary mx-0" @click="dialog = true">Listar Usuários</v-btn>
+          <v-dialog v-model="dialog" hide-overlay persistent width="300">
+            <v-card color="primary" dark>
+              <v-card-text>
+                Por favor, aguarde...
+                <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+              </v-card-text>
+            </v-card>
+          </v-dialog>          
+        </v-flex>
+
+      </v-layout>
+    </Accordion>
+
+    <div class="deals-table mb-2" style="position: relative">
+      
+      <v-card-title>
+        <v-text-field style="max-width: 14rem;" v-model="search" append-icon="search" label="Buscar na listagem" single-line hide-details></v-text-field>
+      </v-card-title>
+
+      <v-data-table :headers="headers" :items="users" :search="search" hide-actions :pagination.sync="pagination">
+        <template slot="items" slot-scope="props">
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.id }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.name }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.email }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.profile }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.added }}</td>
+          <td class="justify-space-around layout px-0">
+            <v-icon small class="mr-2" @click="editItem(props.item.id)">edit</v-icon>
+            <v-icon small @click="removeItem(props.item.id)">delete</v-icon>
+          </td>
+        </template>
+        <div slot="no-results">
+          <div class="empty-state">
+            <v-icon>search</v-icon>
+            <h1>Nenhum item encontrado</h1>
+            <p>A busca por '{{ search }}' não retornou nenhum registro. Tente novamente ou crie um novo.</p>
           </div>
-          <div class="col-md-4 col-sm-6">
-            <md-field>
-              <label for="profile">Perfil</label>
-              <md-select v-model="selectedProfile" name="profile" id="profile" multiple md-dense>
-                <md-option value="profile1">Perfil 1</md-option>
-                <md-option value="profile2">Perfil 2</md-option>
-                <md-option value="profile3">Perfil 3</md-option>
-                <md-option value="profile4">Perfil 4</md-option>
-                <md-option value="profile5">Perfil 5</md-option>
-                <md-option value="profile6">Perfil 6</md-option>
-                <md-option value="profile7">Perfil 7</md-option>
-              </md-select>
-            </md-field>         
-          </div>
-
-          <div class="col-md-4 col-sm-6">
-              <md-button class="md-primary ml-0 md-raised" style="margin-top: 16px">Listar usuários</md-button>
-          </div>    
         </div>
-      </fieldset>
-    </form>
+      </v-data-table>
+      <small>&bull;&nbsp;As linhas com aparência esmaecida representam rascunhos.</small>
 
-    <md-divider class="mt-4 mb-3"></md-divider>
+      <v-tooltip left>
+        <v-btn slot="activator" class="colored-shadow" style="margin-right: -1.5rem; margin-top: 3rem;" absolute dark fab top right color="primary">
+          <v-icon>add</v-icon>
+        </v-btn>
+        <span>Novo usuário</span>
+      </v-tooltip> 
 
-    <div class="row align-items-center">
-      <div class="col-md-7 d-lg-flex align-items-center">
-        <div class="search-box d-flex" style="width: 15rem;">
-            <md-icon class="icon-search">search</md-icon>
-            <md-field>
-              <md-input v-model="search" placeholder="Pesquisar por nome..." @input="searchOnTable" />
-            </md-field>
-        </div>
+      <div class="text-xs-right pt-2 my-3">
+        <v-pagination circle style="outline: none" v-model="pagination.page" :length="pages"></v-pagination>
+      </div>               
 
-      </div>
-      <div class="col-md-5 d-flex flex-md-row-reverse mt-3">
-        <div class="pagination d-flex align-items-center">
-          <p class="mb-0">Mostrando <strong>{{ users.length }}</strong> de <strong>{{ users.length + users.length }}</strong></p>
-          <div class="arrows d-flex align-items-center ml-2">
-            <div class="arrow-container">
-              <md-icon>arrow_left</md-icon>
-            </div>
-            <div class="arrow-container">
-              <md-icon>arrow_right</md-icon>
-            </div>          
-          </div>
-        </div>
-      </div>
-    </div>        
+    </div>
 
-    <div class="space"></div>
+  </v-card>
 
-    <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-fixed-header>
-
-      <md-table-empty-state
-        md-label="Nenhum usuário encontrado"
-        :md-description="`A busca por '${search}' não retornou nenhum registro. Tente novamente ou adicione um novo usuário.`">
-        <md-button class="md-primary md-raised" @click="newUser">Novo usuário</md-button>
-      </md-table-empty-state>
-
-      <md-table-row slot="md-table-row" @click="tableClicked" slot-scope="{ item }">
-        <md-table-cell md-label="Número" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-        <md-table-cell md-label="Nome" md-sort-by="name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="E-mail" md-sort-by="email">{{ item.email }}</md-table-cell>
-        <md-table-cell md-label="Perfil" md-sort-by="profile">{{ item.profile }}</md-table-cell>        
-        <md-table-cell md-label="Data de inclusão" md-sort-by="added">{{ item.added }}</md-table-cell>
-        <md-table-cell md-label="Ações">
-        <md-menu md-direction="bottom-start">
-          <md-button class="md-icon-button" md-menu-trigger>
-            <md-icon>more_vert</md-icon>
-          </md-button>
-
-          <md-menu-content class="table-pop-up">
-            <md-menu-item @click="editItem(item.id)"><md-icon>edit</md-icon><span>Editar</span></md-menu-item>
-            <md-menu-item @click="removeItem(item.id)"><md-icon>delete</md-icon><span>Excluir</span></md-menu-item>
-          </md-menu-content>
-          
-        </md-menu>
-        </md-table-cell>
-      </md-table-row>
-    </md-table>      
-  </div> -->
-  <div>Página com lista de usuários (to-do)</div>
 </template>
 
 <script>
 import my_data from "../datas/users.json";
 import TopSection from "./TopSection";
+import Accordion from "./Accordion";
 
 const toLower = text => {
   return text.toString().toLowerCase();
@@ -129,11 +123,20 @@ const searchByTerm = (items, term) => {
 export default {
   name: "Users",
   data: () => ({
-    selectedNames: [],
+    selectedName: [],
     selectedProfile: [],
-    search: null,
-    searched: [],
-    users: my_data
+    search: "",
+    dialog: false,
+    pagination: {},    
+    users: my_data,
+    headers: [
+      { text: "Número", align: "left", value: "id" },
+      { text: "Nome", value: "name" },
+      { text: "E-mail", value: "email" },
+      { text: "Perfil", value: "profile" },
+      { text: "Date da inclusão", value: "added" },
+      { text: "Ações", value: "" }      
+    ]    
   }),
   methods: {
     tableClicked() {
@@ -159,13 +162,76 @@ export default {
       if (result == true) {
         alert("Usuário de número " + args + " seria removida com essa ação.")
       }
-    }     
+    },
+    toggleAll(params) {
+      this.$nextTick(() => {
+        switch (params) {
+          case "name":
+            this.selectAllNames
+              ? (this.selectedName = [])
+              : (this.selectedName = this.getName.slice());
+            break;
+          case "profile":
+            this.selectAllProfiles
+              ? (this.selectedProfile = [])
+              : (this.selectedProfile = this.getProfile.slice());
+            break;
+          default:
+        }
+      });
+    }         
   },
-  created() {
-    this.searched = this.users;
+  computed: {
+    getName() {
+      return [...new Set(this.users.map(({ name }) => name).sort())];
+    },
+    getProfile() {
+      return [...new Set(this.users.map(({ profile }) => profile).sort())];
+    },
+    selectAllNames() {
+      return this.selectedName.length === this.getName.length;
+    },
+    selectSomeNames() {
+      return this.selectedName.length > 0 && !this.selectAllNames;
+    },
+    selectAllProfiles() {
+      return this.selectedProfile.length === this.getProfile.length;
+    },
+    selectSomeProfiles() {
+      return this.selectedProfile.length > 0 && !this.selectAllProfiles;
+    },    
+    iconName() {
+      if (this.selectAllNames) return "check_box";
+      if (this.selectSomeNames) return "indeterminate_check_box";
+      return "check_box_outline_blank";
+    },
+    iconProfile() {
+      if (this.selectAllProfiles) return "check_box";
+      if (this.selectSomeProfiles) return "indeterminate_check_box";
+      return "check_box_outline_blank";
+    },
+    // Custom pagination
+    pages() {
+      if (
+        this.pagination.rowsPerPage == null ||
+        this.pagination.totalItems == null
+      )
+        return 0;
+      return Math.ceil(
+        this.pagination.totalItems / this.pagination.rowsPerPage
+      );
+    }
+  },
+  watch: {
+    dialog (val) {
+      if (!val) return
+
+      setTimeout(() => (this.dialog = false), 4000)
+    }
   },
   components: {
-    TopSection
+    TopSection,
+    Accordion
   }  
 };
 </script>
