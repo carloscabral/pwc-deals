@@ -14,7 +14,8 @@
             </v-flex>
 
             <v-flex xs12 class="mt-4">
-                <iframe :src="powerBiLink" style="height:80vh; width: 100%;"></iframe>
+                <!-- <iframe :src="powerBiLink" style="height:80vh; width: 100%;"></iframe> -->
+                <iframe :src="powerBiLink" style="height:80vh; width: 100%;" frameborder="0" allowFullScreen="true"></iframe>
             </v-flex>
 
         </v-layout>
@@ -25,7 +26,8 @@
 export default {
   name: "Dashboard",
   data: () => ({
-    powerBiLink: "https://app.powerbi.com/groups/me/reports/134f14e8-96fb-4916-894e-0ce6e64e8329/ReportSectione013e28f062e9c9a5262?ctid=513294a0-3e20-41b2-a970-6d30bf1546fa"
+    // old link: https://app.powerbi.com/groups/me/reports/134f14e8-96fb-4916-894e-0ce6e64e8329/ReportSectione013e28f062e9c9a5262?ctid=513294a0-3e20-41b2-a970-6d30bf1546fa     
+    powerBiLink: "https://app.powerbi.com/reportEmbed?reportId=134f14e8-96fb-4916-894e-0ce6e64e8329&groupId=cfcfe137-96d8-4dfc-8087-35ac2180addf&autoAuth=true"
   }),
   methods: {
     openPowerBI() {
