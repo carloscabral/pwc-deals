@@ -49,7 +49,7 @@
             v-model="selected" 
             select-all 
             :headers="headers" 
-            :items="deals" 
+            :items="getDraftDeals" 
             :search="search" 
             hide-actions 
             :pagination.sync="pagination">
@@ -232,6 +232,13 @@ export default {
     // End CRUD actions
   },
   computed: {
+      getDraftDeals() {
+
+        return this.deals.filter( obj => obj.isDraft === true )
+        // var filteredArray = YourArray.filter(function( obj ) {
+        //     return obj.value === 1;
+        // });
+      },      
     formTitle() {
       return this.editedIndex === -1
         ? "Novo " + this.instanceName
