@@ -153,8 +153,8 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4 mt-2">
-          <v-btn class="colored-shadow" :disabled="dialog" :loading="dialog" color="primary mx-0" @click="dialog = true">Listar Transações</v-btn>
-          <v-dialog v-model="dialog" hide-overlay persistent width="300">
+          <v-btn class="colored-shadow" :disabled="listPopup" :loading="listPopup" color="primary mx-0" @click="listPopup = true">Listar Transações</v-btn>
+          <v-dialog v-model="listPopup" hide-overlay persistent width="300">
             <v-card color="primary" dark>
               <v-card-text>
                 Por favor, aguarde...
@@ -166,6 +166,151 @@
 
       </v-layout>
     </Accordion>
+
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" >
+        <v-card>
+        
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn dark flat @click="save">Salvar</v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+
+          <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                    <v-flex xs12 md2 sm4>
+                      <v-text-field style="max-width: 200px;" v-model="editedItem.dealNumber" label="Número"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 md3 offset-md1 sm4>
+                      <div slot="label" class="radio-label">CA</div>
+                        <v-radio-group v-model="editedItem.ca" row>
+                          <v-radio color="primary" label="Sim" value="yes"></v-radio>
+                          <v-radio color="primary" label="Não" value="no"></v-radio>
+                        </v-radio-group>
+                    </v-flex>
+                    <v-flex xs12 md3 sm4>
+                      <div slot="label" class="radio-label">Privatização?</div>
+                        <v-radio-group v-model="editedItem.privatization" row>
+                          <v-radio color="primary" label="Sim" value="yes"></v-radio>
+                          <v-radio color="primary" label="Não" value="no"></v-radio>
+                        </v-radio-group>
+                    </v-flex>                    
+                    <v-flex xs12>
+                      <v-divider></v-divider>
+                    </v-flex>                    
+                </v-layout>
+                <v-layout wrap>
+                  <v-flex md5 style="max-width: 460px">
+                    <h3>Comprador</h3>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
+                  </v-flex>
+                  <v-flex md4 offset-md1>
+                    <v-flex xs12>
+                      <v-text-field v-model="editedItem.buyerCompany" label="Nome da empresa"></v-text-field>  
+                      <v-select :items="getDealType" v-model="editedItem.dealType" label="SIC"></v-select>
+                      <v-select :items="getBuyerCountry" v-model="editedItem.buyerCountry" label="País da empresa compradora"></v-select>
+                      <div slot="label" class="radio-label">P.E?</div>
+                        <v-radio-group v-model="editedItem.pe" row>
+                          <v-radio color="primary" label="Sim" value="yes"></v-radio>
+                          <v-radio color="primary" label="Não" value="no"></v-radio>
+                        </v-radio-group>
+                      <v-text-field v-model="editedItem.buyerGroup" label="Grupo a que pertence"></v-text-field>
+                      <v-select :items="getDealedCountry" v-model="editedItem.dealedCountry" label="País do grupo ou matriz"></v-select>
+                      <div slot="label" class="radio-label">Origem do capital do grupo ou matriz</div>
+                        <v-radio-group v-model="editedItem.capitalSource" row>
+                          <v-radio color="primary" label="Nacional" value="national"></v-radio>
+                          <v-radio color="primary" label="Internacional" value="international"></v-radio>
+                        </v-radio-group>
+                      <v-select :items="getGroupContinent" v-model="editedItem.groupContinent" label="Continente do grupo ou matriz"></v-select> 
+                      <v-text-field v-model="editedItem.advisor" label="Acessor"></v-text-field>
+                      <div slot="label" class="radio-label">Principal comprador?</div>
+                        <v-radio-group v-model="editedItem.mainBuyer" row>
+                          <v-radio color="primary" label="Sim" value="yes"></v-radio>
+                          <v-radio color="primary" label="Não" value="no"></v-radio>
+                        </v-radio-group>                      
+                    </v-flex>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-divider></v-divider>
+                  </v-flex>                                    
+                </v-layout>
+                <v-layout wrap>
+                  <v-flex md5 style="max-width: 460px">
+                    <h3>Vendedor</h3>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
+                  </v-flex>
+                  <v-flex md4 offset-md1>
+                    <v-flex xs12>
+                      <p>Formulário de cadastro relacionado ao vendedor.</p>                     
+                    </v-flex>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-divider></v-divider>
+                  </v-flex>                    
+                </v-layout>
+                <v-layout wrap>
+                  <v-flex md5 style="max-width: 460px">
+                    <h3>Transação</h3>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
+                  </v-flex>
+                  <v-flex md4 offset-md1>
+                    <v-flex xs12>
+                      <p>Formulário de cadastro relacionado à transação.</p>                     
+                    </v-flex>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-divider></v-divider>
+                  </v-flex>                    
+                </v-layout> 
+                <v-layout wrap>
+                  <v-flex md5 style="max-width: 460px">
+                    <h3>Empresa negociada</h3>
+                    <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vitae nulla laboriosam nesciunt reprehenderit distinctio accusamus itaque qui sapiente! Veritatis molestiae, sequi distinctio optio adipisci aliquid itaque officia rem earum.</p>
+                  </v-flex>
+                  <v-flex md4 offset-md1>
+                    <v-flex xs12>
+                      <p>Formulário de cadastro relacionado à empresa negociada.</p>                     
+                    </v-flex>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-divider></v-divider>
+                  </v-flex>                    
+                </v-layout>                                
+              </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+              <v-spacer></v-spacer>
+              <div class="mb-3">
+                <v-btn color="primary" @click="close">Cancelar</v-btn>
+                <v-btn color="primary" @click="save">Salvar</v-btn>
+              </div>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="showDetailDialog" scrollable max-width="500px">
+      <v-card>
+        <v-card-title>Transação: [ número da transação ]</v-card-title>
+        <v-divider></v-divider>
+        <div class="p-4">
+          <p style="color: rgba(0,0,0,.5)">Todas as informações de uma transação especifica.</p>
+        </div>
+        <v-card-text style="height: 300px;">
+
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn color="primary" flat @click="showDetailDialog = false">Ok</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>            
 
     <div class="deals-table mb-2" style="position: relative">
       
@@ -192,8 +337,9 @@
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-right">{{ props.item.dealValue }}</td>
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.dealedSIC }}</td>
           <td class="justify-space-around layout px-0">
-            <v-icon small class="mr-2" @click="editItem(props.item.dealNumber)">edit</v-icon>
-            <v-icon small @click="removeItem(props.item.dealNumber)">delete</v-icon>
+            <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+            <v-icon small class="mr-2" @click="showItem(props.item)">visibility</v-icon>
+            <v-icon small @click="deleteItem(props.item)">delete</v-icon>
           </td>
         </template>
         <div slot="no-results">
@@ -207,7 +353,7 @@
       <small>&bull;&nbsp;As linhas com aparência esmaecida representam rascunhos.</small>
 
       <v-tooltip left>
-        <v-btn slot="activator" class="colored-shadow" style="margin-right: -1.5rem; margin-top: 3rem;" absolute dark fab top right color="primary">
+        <v-btn @click="dialog = true" slot="activator" class="colored-shadow" style="margin-right: -1.5rem; margin-top: 3rem;" absolute dark fab top right color="primary">
           <v-icon>add</v-icon>
         </v-btn>
         <span>Nova transação</span>
@@ -231,6 +377,12 @@ import Accordion from "./Accordion";
 export default {
   name: "Deals",
   data: () => ({
+    //   Related to CRUD actions
+    instanceName: "Transação",
+    editedIndex: -1,
+    editedItem: { dealNumber: 0, dealDate: '21/02/18', dealType: '', buyerCompany: '', buyerGroup: '', buyerCountry: '', sellerCompany: '', dealedCompany: '', dealedCountry: '', region: '', state: '', dealValue: '', dealedSIC: '', ca: "", capitalSource: "", advisor: "", mainBuyer: "", isDraft: "", groupContinent: "", privatization: "" },
+    defaultItem: { dealNumber: 0, dealDate: '21/02/18', dealType: '', buyerCompany: '', buyerGroup: '', buyerCountry: '', sellerCompany: '', dealedCompany: '', dealedCountry: '', region: '', state: '', dealValue: '', dealedSIC: '', ca: "", capitalSource: "", advisor: "", mainBuyer: "", isDraft: "", groupContinent: "", privatization: "" },
+    //   
     initialDate: new Date().toISOString().substr(0, 7),
     endDate: new Date().toISOString().substr(0, 7),
     menu1: false,
@@ -249,6 +401,8 @@ export default {
     peBuyer: "",
     search: "",
     dialog: false,
+    listPopup: false,
+    showDetailDialog: false,
     pagination: {},
     deals: my_data,
     headers: [
@@ -262,7 +416,7 @@ export default {
       { text: "Região", value: "region" },
       { text: "USD (MM)", value: "dealValue" },
       { text: "Setor / Indústria", value: "dealedSIC" },
-      { text: "Ações", value: "iron" }
+      { text: "Ações", value: "" }
     ]
   }),
   methods: {
@@ -280,15 +434,36 @@ export default {
     exportList() {
       alert("Relatório será exportado para excel.");
     },
-    editItem(args) {
-      alert("Entra em modo de edição do item: " + args);
+    // Related to CRUD action
+    editItem (item) {
+      this.editedIndex = this.deals.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
     },
-    removeItem(args) {
-      let result = confirm("Tem certeza que deseja excluir esse registro?");
-      if (result == true) {
-        alert("Item de número " + args + " seria removido com essa ação.");
+    showItem(args) {
+      alert("Mostra todos os dados do item da listagem.")
+    },   
+    deleteItem (item) {
+      const index = this.deals.indexOf(item)
+      confirm('Tem certeza de que deseja excluir a transação ' + item.id + '?') && this.deals.splice(index, 1)
+    },
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      }, 300)
+    },
+    save () {
+      if (this.editedIndex > -1) {
+        Object.assign(this.deals[this.editedIndex], this.editedItem)
+      } else {
+        this.deals.push(this.editedItem)
+        console.log(this.editedItem)
       }
+      this.close()
     },
+    // End CRUD actions
     toggleAll(params) {
       this.$nextTick(() => {
         switch (params) {
@@ -334,10 +509,16 @@ export default {
     }
   },
   computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? 'Nova ' + this.instanceName : 'Editar ' + this.instanceName
+    },
     // vmkdslmvks
     getDealType() {
       return [...new Set(this.deals.map(({ dealType }) => dealType).sort())];
     },
+    getGroupContinent() {
+      return [...new Set(this.deals.map(({ groupContinent }) => groupContinent).sort())];
+    },    
     getBuyerGroup() {
       return [
         ...new Set(this.deals.map(({ buyerGroup }) => buyerGroup).sort())
@@ -461,11 +642,12 @@ export default {
     }
   },
   watch: {
-    dialog (val) {
+    listPopup (val) {
       if (!val) return
 
-      setTimeout(() => (this.dialog = false), 4000)
-    }
+      setTimeout(() => (this.listPopup = false), 4000)
+    },
+    dialog (val) { val || this.close() }    
   },
   components: {
     TopSection,

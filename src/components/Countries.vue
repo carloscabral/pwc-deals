@@ -69,9 +69,10 @@
         <template slot="items" slot-scope="props">
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.id }}</td>
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.name }}</td>
-          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.state }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.continent }}</td>
           <td class="justify-space-around layout px-0">
             <v-icon small class="mr-2" @click="editItem(props.item.id)">edit</v-icon>
+            <v-icon small class="mr-2" @click="showItem(props.item.id)">visibility</v-icon>
             <v-icon small @click="removeItem(props.item.id)">delete</v-icon>
           </td>
         </template>
@@ -107,17 +108,6 @@ import my_data from "../datas/countries.json";
 import TopSection from "./TopSection";
 import Accordion from "./Accordion";
 
-const toLower = text => {
-  return text.toString().toLowerCase();
-};
-
-const searchByTerm = (items, term) => {
-  if (term) {
-    return items.filter(item => toLower(item.name).includes(toLower(term)));
-  }
-  return items;
-};
-
 export default {
   name: "Countries",
   data: () => ({
@@ -147,9 +137,12 @@ export default {
     exportList() {
       alert("Relatório será exportado para excel.")
     },
+    showItem(args) {
+      alert("Mostra todos os dados do item da listagem.")
+    },
     editItem(args) {
       alert("Entra em modo de edição do país: " + args)
-    },
+    },    
     removeItem(args) {
       let result = confirm("Tem certeza que deseja excluir esse registro?")
       if (result == true) {

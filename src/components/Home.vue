@@ -11,7 +11,7 @@
       <v-toolbar-title>Base de transações</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat>Carlos</v-btn>
+        <v-btn flat><v-icon class="hidden-sm-and-down" left dark>exit_to_app</v-icon>Sair</v-btn>
       </v-toolbar-items>      
         <v-toolbar-side-icon class="hidden-md-and-up" @click.stop="drawerRight = !drawerRight"></v-toolbar-side-icon>
     </v-toolbar>

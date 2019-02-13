@@ -74,6 +74,7 @@
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.added }}</td>
           <td class="justify-space-around layout px-0">
             <v-icon small class="mr-2" @click="editItem(props.item.id)">edit</v-icon>
+            <v-icon small class="mr-2" @click="showItem(props.item.id)">visibility</v-icon>
             <v-icon small @click="removeItem(props.item.id)">delete</v-icon>
           </td>
         </template>
@@ -154,6 +155,9 @@ export default {
     exportList() {
       alert("Relatório será exportado para excel.")
     },
+    showItem(args) {
+      alert("Mostra todos os dados do item da listagem.")
+    },     
     editItem(args) {
       alert("Entra em modo de edição da usuário: " + args)
     },

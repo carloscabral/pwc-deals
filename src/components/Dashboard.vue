@@ -8,13 +8,13 @@
             </v-flex>
 
             <v-flex align-self-start xs12 sm5 class="px-xs-4 text-md-right">
-                <v-btn color="primary" class="white--text ml-0 colored-shadow">
+                <v-btn color="primary" class="white--text ml-0 colored-shadow" :href="powerBiLink">
                     Ver no Power BI
                 </v-btn>
             </v-flex>
 
-            <v-flex xs12>
-                <div class="power-bi mt-3"></div>
+            <v-flex xs12 class="mt-4">
+                <iframe :src="powerBiLink" style="height:80vh; width: 100%;"></iframe>
             </v-flex>
 
         </v-layout>
@@ -23,6 +23,10 @@
 </template>
 <script>
 export default {
+  name: "Dashboard",
+  data: () => ({
+    powerBiLink: "https://app.powerbi.com/groups/me/reports/134f14e8-96fb-4916-894e-0ce6e64e8329/ReportSectione013e28f062e9c9a5262?ctid=513294a0-3e20-41b2-a970-6d30bf1546fa"
+  }),
   methods: {
     openPowerBI() {
       alert("Esse botão abre o PowerBI");
@@ -31,12 +35,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.power-bi {
-  width: 100%;
-  height: 650px;
-  background: url("../assets/images/power-bi.jpg");
-  background-size: cover;
-}
 
 </style>
 
