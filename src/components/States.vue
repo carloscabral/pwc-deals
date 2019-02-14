@@ -2,14 +2,14 @@
 
   <v-card class="pa-4 mx-sm-4">
 
-    <TopSection title="Estados" @print="printList" @export="exportList" />
+    <TopSection :title="instanceName" @print="printList" @export="exportList" />
 
     <Accordion>
 
       <v-layout row wrap class="p-3">        
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedName" :items="getName" label="Nome" multiple dense>
+          <v-select v-model="selectedName" :items="getDistinct('name')" label="Nome" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -18,7 +18,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('name')">
               <v-list-tile-action>
-                <v-icon :color="selectedName.length > 0 ? 'primary' : ''">{{ iconName }}</v-icon>
+                <v-icon v-if="selectAll('name')" :color="selectedName.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('name')" :color="selectedName.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectSome('name').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todos</v-list-tile-title>
             </v-list-tile>
@@ -27,7 +29,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedRegion" :items="getRegion" label="Região" multiple dense>
+          <v-select v-model="selectedRegion" :items="getDistinct('region')" label="Região" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -36,7 +38,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('region')">
               <v-list-tile-action>
-                <v-icon :color="selectedRegion.length > 0 ? 'primary' : ''">{{ iconRegion }}</v-icon>
+                <v-icon v-if="selectAll('region')" :color="selectedRegion.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('region')" :color="selectedRegion.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectSome('region').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todos</v-list-tile-title>
             </v-list-tile>
@@ -45,8 +49,8 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4 mt-2">
-          <v-btn class="colored-shadow" :disabled="dialog" :loading="dialog" color="primary mx-0" @click="dialog = true">Listar Estados</v-btn>
-          <v-dialog v-model="dialog" hide-overlay persistent width="300">
+          <v-btn class="colored-shadow" :disabled="listPopup" :loading="listPopup" color="primary mx-0" @click="listPopup = true">Listar Estados</v-btn>
+          <v-dialog v-model="listPopup" hide-overlay persistent width="300">
             <v-card color="primary" dark>
               <v-card-text>
                 Por favor, aguarde...
@@ -59,21 +63,47 @@
       </v-layout>
     </Accordion>
 
-    <div class="deals-table mb-2" style="position: relative">
+    <v-dialog v-model="dialog" max-width="500px">
+        <v-card>
+          <v-card-title style="background-color: rgba(255, 111, 0, .1)">
+              <span class="headline ml-3">{{ formTitle }}</span>
+          </v-card-title>
+
+          <v-card-text>
+              <v-container grid-list-md>
+              <v-layout wrap>
+                  <v-flex xs12 sm3>
+                    <v-text-field v-model="editedItem.name" label="Sigla"></v-text-field>
+                  </v-flex>               
+                  <v-flex xs12 sm7 offset-sm1>
+                    <v-select :items="getDistinct('region')" v-model="editedItem.region" label="Região que pertence"></v-select>
+                  </v-flex>
+              </v-layout>
+              </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" flat @click="close">Cancelar</v-btn>
+              <v-btn color="primary" flat @click="save">Salvar</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>      
+
+    <div class="mb-2" style="position: relative">
       
       <v-card-title>
         <v-text-field style="max-width: 14rem;" v-model="search" append-icon="search" label="Buscar na listagem" single-line hide-details></v-text-field>
       </v-card-title>
 
-      <v-data-table :headers="headers" :items="states" :search="search" hide-actions :pagination.sync="pagination">
+      <v-data-table :headers="headers" :items="dataTable" :search="search" hide-actions :pagination.sync="pagination">
         <template slot="items" slot-scope="props">
-          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.id }}</td>
-          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.name }}</td>
-          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.region }}</td>
+          <td class="text-xs-left">{{ props.item.name }}</td>
+          <td class="text-xs-left">{{ props.item.region }}</td>
           <td class="justify-space-around layout px-0">
-            <v-icon small class="mr-2" @click="editItem(props.item.id)">edit</v-icon>
-            <v-icon small class="mr-2" @click="showItem(props.item.id)">visibility</v-icon>
-            <v-icon small @click="removeItem(props.item.id)">delete</v-icon>
+            <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+            <v-icon small class="mr-2" @click="showItem(props.item)">visibility</v-icon>
+            <v-icon small @click="deleteItem(props.item)">delete</v-icon>
           </td>
         </template>
         <div slot="no-results">
@@ -87,7 +117,7 @@
       <small>&bull;&nbsp;As linhas com aparência esmaecida representam rascunhos.</small>
 
       <v-tooltip left>
-        <v-btn slot="activator" class="colored-shadow" style="margin-right: -1.5rem; margin-top: 3rem;" absolute dark fab top right color="primary">
+        <v-btn slot="activator" @click="dialog = true" class="colored-shadow" style="margin-right: -1.5rem; margin-top: 3rem;" absolute dark fab top right color="primary">
           <v-icon>add</v-icon>
         </v-btn>
         <span>Novo Estado</span>
@@ -95,7 +125,7 @@
 
       <div class="text-xs-right pt-2 my-3">
         <v-pagination circle style="outline: none" v-model="pagination.page" :length="pages"></v-pagination>
-      </div>               
+      </div>                  
 
     </div>
 
@@ -105,115 +135,34 @@
 
 <script>
 import my_data from "../datas/states.json";
-import TopSection from "./TopSection";
-import Accordion from "./Accordion";
+import TopSection from "./shared/TopSection";
+import Accordion from "./shared/Accordion";
+
+import { generalMixin } from '../mixins/generalMixin'
 
 export default {
+  mixins: [ generalMixin ],
   name: "States",
   data: () => ({
+    instanceName: "Estados",
+    editedItem: { name: '', region: ''},
+    defaultItem: { name: '', region: ''},    
     selectedRegion: [],
     selectedName: [],
-    search: "",
-    dialog: false,
-    pagination: {},    
-    states: my_data,
+    dataTable: my_data,
     headers: [
-      { text: "Número", align: "left", value: "id" },
-      { text: "Nome", value: "name" },
+      { text: "Sigla", value: "name" },
       { text: "Região", value: "region" },
       { text: "Ações", value: "" }      
     ]
   }),
-  methods: {
-    tableClicked() {
-      alert("Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro.")
-    },    
-    // newCountry() {
-    //   this.$router.push("/paises/novo");
-    // },
-    printList() {
-      alert("Relatório será impresso.")
-    },
-    exportList() {
-      alert("Relatório será exportado para excel.")
-    },
-    editItem(args) {
-      alert("Entra em modo de edição do país: " + args)
-    },
-    showItem(args) {
-      alert("Mostra todos os dados do item da listagem.")
-    },    
-    removeItem(args) {
-      let result = confirm("Tem certeza que deseja excluir esse registro?")
-      if (result == true) {
-        alert("País de número " + args + " seria removido com essa ação.")
-      }
-    },
-    toggleAll(params) {
-      this.$nextTick(() => {
-        switch (params) {
-          case "name":
-            this.selectAllNames
-              ? (this.selectedName = [])
-              : (this.selectedName = this.getName.slice());
-            break;
-          case "region":
-            this.selectAllRegions
-              ? (this.selectedRegion = [])
-              : (this.selectedRegion = this.getRegion.slice());
-            break;
-          default:
-        }
-      });
-    }          
-  },
-  computed: {
-    getName() {
-      return [...new Set(this.states.map(({ name }) => name).sort())];
-    },
-    getRegion() {
-      return [...new Set(this.states.map(({ region }) => region).sort())];
-    },
-    selectAllNames() {
-      return this.selectedName.length === this.getName.length;
-    },
-    selectSomeNames() {
-      return this.selectedName.length > 0 && !this.selectAllNames;
-    },
-    selectAllRegions() {
-      return this.selectedRegion.length === this.getRegion.length;
-    },
-    selectSomeRegions() {
-      return this.selectedRegion.length > 0 && !this.selectAllRegions;
-    },    
-    iconName() {
-      if (this.selectAllNames) return "check_box";
-      if (this.selectSomeNames) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconRegion() {
-      if (this.selectAllRegions) return "check_box";
-      if (this.selectSomeRegions) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    // Custom pagination
-    pages() {
-      if (
-        this.pagination.rowsPerPage == null ||
-        this.pagination.totalItems == null
-      )
-        return 0;
-      return Math.ceil(
-        this.pagination.totalItems / this.pagination.rowsPerPage
-      );
-    }
-  },
   watch: {
-    dialog (val) {
+    listPopup (val) {
       if (!val) return
 
-      setTimeout(() => (this.dialog = false), 4000)
-    }
+      setTimeout(() => (this.listPopup = false), 3000)
+    },
+    dialog (val) { val || this.close() }    
   },
   components: {
     TopSection,

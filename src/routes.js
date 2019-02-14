@@ -1,11 +1,6 @@
 import Home from './components/Home.vue';
 import Deals from './components/Deals.vue'
 import Users from './components/Users.vue'
-import NewDeal from './components/NewDeal.vue'
-import NewUser from './components/NewUser.vue'
-import NewCountry from './components/NewCountry.vue'
-import NewCity from './components/NewCity.vue'
-import NewState from './components/NewState.vue'
 import Dashboard from './components/Dashboard.vue'
 import Countries from './components/Countries.vue'
 import States from './components/States.vue'
@@ -19,11 +14,6 @@ export const routes = [
         { path: '', component: Dashboard },    
         { path: '/usuarios', component: Users },
         { path: '/transacoes', component: Deals },
-        { path: '/transacoes/novo', component: NewDeal },
-        { path: '/usuarios/novo', component: NewUser },
-        { path: '/paises/novo', component: NewCountry },
-        { path: '/cidades/novo', component: NewCity },
-        { path: '/estados/novo', component: NewState },
         { path: '/paises', component: Countries },
         { path: '/estados', component: States },
         { path: '/cidades', component: Cities },

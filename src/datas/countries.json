@@ -13,5 +13,15 @@
         "id": 3,
         "name": "Argentina",
         "continent": "América do Sul"
+    },
+    {
+        "id": 4,
+        "name": "Camarões",
+        "continent": "África"
+    },
+    {
+        "id": 5,
+        "name": "Nova Zelândia",
+        "continent": "Oceania"
     }
-  ]
+]

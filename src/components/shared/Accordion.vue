@@ -19,61 +19,59 @@ export default {
   data() {
     return {
       expanded: true
-    }
+    };
   },
   methods: {
     toggleCardState() {
       this.expanded = !this.expanded;
     }
-  }    
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-
 .fieldset {
-    position: relative;
+  position: relative;
 }
 
 .collapse-icon {
-    position: absolute; 
-    right: 1rem; 
-    top: 0;        
-    width: 24; 
-    height: 24; 
-    background-color: #fff;
-    box-shadow: 0 10px 20px -2px rgba(0,0,0,.2);
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  width: 24;
+  height: 24;
+  background-color: #fff;
+  box-shadow: 0 10px 20px -2px rgba(0, 0, 0, 0.2);
 
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 
-    i {
-        transform: rotate(180deg);
-        transition: transform .2s ease-out;            
-    }
+  i {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease-out;
+  }
 
-    &.not-expanded i {
-        transform: rotate(0deg);
-    }
+  &.not-expanded i {
+    transform: rotate(0deg);
+  }
 }
 
 .option-content {
-    transition: all .2s ease;
-    
-    &.not-expanded {
-        transform: scaleY(0);
-        transform-origin: top;
-        opacity: 0;
-        height: 0;
-        padding: 0;
-    }
+  transition: all 0.2s ease;
 
-    i {
-        transform: rotate(0deg);
-    }
+  &.not-expanded {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+    height: 0;
+    padding: 0;
+  }
+
+  i {
+    transform: rotate(0deg);
+  }
 }
-
 </style>
 
 

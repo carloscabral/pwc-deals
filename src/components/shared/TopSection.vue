@@ -29,7 +29,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .top-section {
   margin-bottom: 1.5rem;
 }
@@ -41,10 +40,9 @@ export default {
 @media only screen and (min-width: 576px) {
   .top-section h1 {
     font-size: 2rem;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 }
-
 </style>
 
 

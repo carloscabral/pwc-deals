@@ -2,14 +2,14 @@
 
   <v-card class="pa-4 mx-sm-4">
 
-    <TopSection title="Transações" @print="printList" @export="exportList" />
+    <TopSection :title="instanceName" @print="printList" @export="exportList" />
 
     <Accordion>
 
       <v-layout row wrap class="p-3">
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false"
+          <v-menu ref="date1" v-model="date1" :close-on-content-click="false"
             :nudge-right="40" lazy transition="scale-transition" 
             offset-y full-width max-width="290px" min-width="290px">
             <v-text-field slot="activator" v-model="initialDate" label="Data inicial" readonly></v-text-field>
@@ -19,7 +19,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false"
+          <v-menu ref="date2" v-model="date2" :close-on-content-click="false"
             :nudge-right="40" lazy transition="scale-transition" 
             offset-y full-width max-width="290px" min-width="290px">
             <v-text-field slot="activator" v-model="endDate" label="Data final" readonly></v-text-field>
@@ -29,7 +29,7 @@
         </v-flex>          
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedDealType" :items="getDealType" label="Tipo transação" multiple dense>
+          <v-select v-model="selectedDealType" :items="getDistinct('dealType')" label="Tipo transação" multiple dense>  
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -38,7 +38,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('dealType')">
               <v-list-tile-action>
-                <v-icon :color="selectedDealType.length > 0 ? 'primary' : ''">{{ iconDealType }}</v-icon>
+                <v-icon v-if="selectAll('dealType')" :color="selectedDealType.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('dealType')" :color="selectedDealType.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectAll('dealType').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todas</v-list-tile-title>
             </v-list-tile>
@@ -63,7 +65,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedBuyerCountry" :items="getBuyerCountry" label="País grupo / matriz" multiple dense>
+          <v-select v-model="selectedBuyerCountry" :items="getDistinct('buyerCountry')" label="País grupo / matriz" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -72,7 +74,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('buyerCountry')">
               <v-list-tile-action>
-                <v-icon :color="selectedBuyerCountry.length > 0 ? 'primary' : ''">{{ iconBuyerCountry }}</v-icon>
+                <v-icon v-if="selectAll('buyerCountry')" :color="selectedBuyerCountry.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('buyerCountry')" :color="selectedBuyerCountry.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                 <v-icon v-else :color="selectAll('buyerCountry').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todas</v-list-tile-title>
             </v-list-tile>
@@ -81,7 +85,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedDealedSIC" :items="getDealedSIC" label="Setor / Indústria" multiple dense>
+          <v-select v-model="selectedDealedSIC" :items="getDistinct('dealedSIC')" label="Setor / Indústria" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -90,7 +94,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('dealedSIC')">
               <v-list-tile-action>
-                <v-icon :color="selectedDealedSIC.length > 0 ? 'primary' : ''">{{ iconDealedSIC }}</v-icon>
+                <v-icon v-if="selectAll('dealedSIC')" :color="selectedDealedSIC.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('dealedSIC')" :color="selectedDealedSIC.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectSome('dealedSIC').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todas</v-list-tile-title>
             </v-list-tile>
@@ -99,7 +105,7 @@
         </v-flex>
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedDealedCountry" :items="getDealedCountry" label="País onde ocorreu a transação" multiple dense>
+          <v-select v-model="selectedDealedCountry" :items="getDistinct('dealedCountry')" label="País onde ocorreu a transação" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -108,7 +114,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('dealedCountry')">
               <v-list-tile-action>
-                <v-icon :color="selectedDealedCountry.length > 0 ? 'primary' : ''">{{ iconDealedCountry }}</v-icon>
+                <v-icon v-if="selectAll('dealedCountry')" :color="selectedDealedCountry.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('dealedCountry')" :color="selectedDealedCountry.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectSome('dealedCountry').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>                
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todas</v-list-tile-title>
             </v-list-tile>
@@ -117,7 +125,7 @@
         </v-flex> 
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedRegion" :items="getRegion" label="Região" multiple dense>
+          <v-select v-model="selectedRegion" :items="getDistinct('region')" label="Região" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -126,7 +134,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('region')">
               <v-list-tile-action>
-                <v-icon :color="selectedRegion.length > 0 ? 'primary' : ''">{{ iconRegion }}</v-icon>
+                <v-icon v-if="selectAll('region')" :color="selectedRegion.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('region')" :color="selectedRegion.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectSome('region').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todas</v-list-tile-title>
             </v-list-tile>
@@ -135,7 +145,7 @@
         </v-flex> 
 
         <v-flex xs12 sm6 md4 lg3 class="px-sm-4">
-          <v-select v-model="selectedState" :items="getState" label="Estado" multiple dense>
+          <v-select v-model="selectedState" :items="getDistinct('state')" label="Estado" multiple dense>
             <template slot="selection" slot-scope="{ item, index }">
               <v-chip small v-if="index === 0">
                 <span>{{ item }}</span>
@@ -144,7 +154,9 @@
             </template>              
             <v-list-tile slot="prepend-item" ripple @click="toggleAll('state')">
               <v-list-tile-action>
-                <v-icon :color="selectedState.length > 0 ? 'primary' : ''">{{ iconState }}</v-icon>
+                <v-icon v-if="selectAll('state')" :color="selectedState.length > 0 ? 'primary' : ''">check_box</v-icon>
+                <v-icon v-else-if="selectSome('state')" :color="selectedState.length > 0 ? 'primary' : ''">indeterminate_check_box</v-icon>
+                <v-icon v-else :color="selectSome('state').length > 0 ? 'primary' : ''">check_box_outline_blank</v-icon>
               </v-list-tile-action>
               <v-list-tile-title>Selecionar todas</v-list-tile-title>
             </v-list-tile>
@@ -213,21 +225,21 @@
                   <v-flex md4 offset-md1>
                     <v-flex xs12>
                       <v-text-field v-model="editedItem.buyerCompany" label="Nome da empresa"></v-text-field>  
-                      <v-select :items="getDealType" v-model="editedItem.dealType" label="SIC"></v-select>
-                      <v-select :items="getBuyerCountry" v-model="editedItem.buyerCountry" label="País da empresa compradora"></v-select>
+                      <v-select :items="getDistinct('dealType')" v-model="editedItem.dealType" label="SIC"></v-select>
+                      <v-select :items="getDistinct('buyerCountry')" v-model="editedItem.buyerCountry" label="País da empresa compradora"></v-select>
                       <div slot="label" class="radio-label">P.E?</div>
                         <v-radio-group v-model="editedItem.pe" row>
                           <v-radio color="primary" label="Sim" value="yes"></v-radio>
                           <v-radio color="primary" label="Não" value="no"></v-radio>
                         </v-radio-group>
                       <v-text-field v-model="editedItem.buyerGroup" label="Grupo a que pertence"></v-text-field>
-                      <v-select :items="getDealedCountry" v-model="editedItem.dealedCountry" label="País do grupo ou matriz"></v-select>
+                      <v-select :items="getDistinct('dealedCountry')" v-model="editedItem.dealedCountry" label="País do grupo ou matriz"></v-select>
                       <div slot="label" class="radio-label">Origem do capital do grupo ou matriz</div>
                         <v-radio-group v-model="editedItem.capitalSource" row>
                           <v-radio color="primary" label="Nacional" value="national"></v-radio>
                           <v-radio color="primary" label="Internacional" value="international"></v-radio>
                         </v-radio-group>
-                      <v-select :items="getGroupContinent" v-model="editedItem.groupContinent" label="Continente do grupo ou matriz"></v-select> 
+                      <v-select :items="getDistinct('groupContinent')" v-model="editedItem.groupContinent" label="Continente do grupo ou matriz"></v-select> 
                       <v-text-field v-model="editedItem.advisor" label="Acessor"></v-text-field>
                       <div slot="label" class="radio-label">Principal comprador?</div>
                         <v-radio-group v-model="editedItem.mainBuyer" row>
@@ -293,32 +305,15 @@
               </div>
           </v-card-actions>
         </v-card>
-    </v-dialog>
+    </v-dialog>           
 
-    <v-dialog v-model="showDetailDialog" scrollable max-width="500px">
-      <v-card>
-        <v-card-title>Transação: [ número da transação ]</v-card-title>
-        <v-divider></v-divider>
-        <div class="p-4">
-          <p style="color: rgba(0,0,0,.5)">Todas as informações de uma transação especifica.</p>
-        </div>
-        <v-card-text style="height: 300px;">
-
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-btn color="primary" flat @click="showDetailDialog = false">Ok</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>            
-
-    <div class="deals-table mb-2" style="position: relative">
+    <div class="mb-2" style="position: relative">
       
       <v-card-title>
         <v-text-field style="max-width: 14rem;" v-model="search" append-icon="search" label="Buscar na listagem" single-line hide-details></v-text-field>
       </v-card-title>
 
-      <v-data-table :headers="headers" :items="deals" :search="search" hide-actions :pagination.sync="pagination">
+      <v-data-table :headers="headers" :items="dataTable" :search="search" hide-actions :pagination.sync="pagination">
         <template slot="items" slot-scope="props">
           <td :class="{ dimmed: props.item.isDraft }">{{ props.item.dealNumber }}</td>
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.dealDate }}</td>
@@ -371,23 +366,22 @@
 
 <script>
 import my_data from "../datas/deals.json";
-import TopSection from "./TopSection";
-import Accordion from "./Accordion";
+import TopSection from "./shared/TopSection";
+import Accordion from "./shared/Accordion";
+
+import { generalMixin } from '../mixins/generalMixin'
 
 export default {
+  mixins: [ generalMixin ],
   name: "Deals",
   data: () => ({
-    //   Related to CRUD actions
-    instanceName: "Transação",
-    editedIndex: -1,
+    instanceName: "Transações",
     editedItem: { dealNumber: 0, dealDate: '21/02/18', dealType: '', buyerCompany: '', buyerGroup: '', buyerCountry: '', sellerCompany: '', dealedCompany: '', dealedCountry: '', region: '', state: '', dealValue: '', dealedSIC: '', ca: "", capitalSource: "", advisor: "", mainBuyer: "", isDraft: "", groupContinent: "", privatization: "" },
     defaultItem: { dealNumber: 0, dealDate: '21/02/18', dealType: '', buyerCompany: '', buyerGroup: '', buyerCountry: '', sellerCompany: '', dealedCompany: '', dealedCountry: '', region: '', state: '', dealValue: '', dealedSIC: '', ca: "", capitalSource: "", advisor: "", mainBuyer: "", isDraft: "", groupContinent: "", privatization: "" },
-    //   
     initialDate: new Date().toISOString().substr(0, 7),
     endDate: new Date().toISOString().substr(0, 7),
-    menu1: false,
-    menu2: false,
-    modal: false,
+    date1: false,
+    date2: false,
     selectedDealType: [],
     selectedBuyerGroup: [],
     selectedDealedSIC: [],
@@ -399,12 +393,7 @@ export default {
     selectedLastDate: new Date(),
     privatization: "",
     peBuyer: "",
-    search: "",
-    dialog: false,
-    listPopup: false,
-    showDetailDialog: false,
-    pagination: {},
-    deals: my_data,
+    dataTable: my_data,
     headers: [
       { text: "Número", align: "left", value: "dealNumber" },
       { text: "Data", value: "dealDate" },
@@ -419,233 +408,11 @@ export default {
       { text: "Ações", value: "" }
     ]
   }),
-  methods: {
-    tableClicked() {
-      alert(
-        "Ao clicar em uma linha da tabela serão exibidos todos os dados daquele registro."
-      );
-    },
-    newDeal() {
-      this.$router.push("/transacoes/novo");
-    },
-    printList() {
-      alert("Relatório será impresso.");
-    },
-    exportList() {
-      alert("Relatório será exportado para excel.");
-    },
-    // Related to CRUD action
-    editItem (item) {
-      this.editedIndex = this.deals.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
-    showItem(args) {
-      alert("Mostra todos os dados do item da listagem.")
-    },   
-    deleteItem (item) {
-      const index = this.deals.indexOf(item)
-      confirm('Tem certeza de que deseja excluir a transação ' + item.id + '?') && this.deals.splice(index, 1)
-    },
-    close () {
-      this.dialog = false
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      }, 300)
-    },
-    save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.deals[this.editedIndex], this.editedItem)
-      } else {
-        this.deals.push(this.editedItem)
-        console.log(this.editedItem)
-      }
-      this.close()
-    },
-    // End CRUD actions
-    toggleAll(params) {
-      this.$nextTick(() => {
-        switch (params) {
-          case "dealType":
-            this.selectAllDealTypes
-              ? (this.selectedDealType = [])
-              : (this.selectedDealType = this.getDealType.slice());
-            break;
-          case "buyerGroup":
-            this.selectAllBuyerGroups
-              ? (this.selectedBuyerGroup = [])
-              : (this.selectedBuyerGroup = this.getBuyerGroup.slice());
-            break;
-          case "dealedSIC":
-            this.selectAllDealedSICs
-              ? (this.selectedDealedSIC = [])
-              : (this.selectedDealedSIC = this.getDealedSIC.slice());
-            break;
-          case "buyerCountry":
-            this.selectAllBuyerCountries
-              ? (this.selectedBuyerCountry = [])
-              : (this.selectedBuyerCountry = this.getBuyerCountry.slice());
-            break;
-          case "dealedCountry":
-            this.selectAllDealedCountries
-              ? (this.selectedDealedCountry = [])
-              : (this.selectedDealedCountry = this.getDealedCountry.slice());
-            break;
-          case "region":
-            this.selectAllRegions
-              ? (this.selectedRegion = [])
-              : (this.selectedRegion = this.getRegion.slice());
-            break;
-          case "state":
-            this.selectAllStates
-              ? (this.selectedState = [])
-              : (this.selectedState = this.getState.slice());
-            break;
-          default:
-          //(this.selectAllItems) ? this.selectedBuyers = [] : this.selectedBuyers = this.getDealType.slice()
-        }
-      });
-    }
-  },
-  computed: {
-    formTitle () {
-      return this.editedIndex === -1 ? 'Nova ' + this.instanceName : 'Editar ' + this.instanceName
-    },
-    // vmkdslmvks
-    getDealType() {
-      return [...new Set(this.deals.map(({ dealType }) => dealType).sort())];
-    },
-    getGroupContinent() {
-      return [...new Set(this.deals.map(({ groupContinent }) => groupContinent).sort())];
-    },    
-    getBuyerGroup() {
-      return [
-        ...new Set(this.deals.map(({ buyerGroup }) => buyerGroup).sort())
-      ];
-    },
-    getDealedSIC() {
-      return [...new Set(this.deals.map(({ dealedSIC }) => dealedSIC).sort())];
-    },
-    getBuyerCountry() {
-      return [
-        ...new Set(this.deals.map(({ buyerCountry }) => buyerCountry).sort())
-      ];
-    },
-    getDealedCountry() {
-      return [
-        ...new Set(this.deals.map(({ dealedCountry }) => dealedCountry).sort())
-      ];
-    },
-    getRegion() {
-      return [...new Set(this.deals.map(({ region }) => region).sort())];
-    },
-    getState() {
-      return [...new Set(this.deals.map(({ state }) => state).sort())];
-    },
-
-    //  bfklbmkl
-    selectAllDealTypes() {
-      return this.selectedDealType.length === this.getDealType.length;
-    },
-    selectSomeDealTypes() {
-      return this.selectedDealType.length > 0 && !this.selectAllDealTypes;
-    },
-    selectAllBuyerGroups() {
-      return this.selectedBuyerGroup.length === this.getBuyerGroup.length;
-    },
-    selectSomeBuyerGroups() {
-      return this.selectedBuyerGroup.length > 0 && !this.selectAllBuyerGroups;
-    },
-    selectAllDealedSICs() {
-      return this.selectedDealedSIC.length === this.getDealedSIC.length;
-    },
-    selectSomeDealedSICs() {
-      return this.selectedDealedSIC.length > 0 && !this.selectAllDealedSICs;
-    },
-    selectAllBuyerCountries() {
-      return this.selectedBuyerCountry.length === this.getBuyerCountry.length;
-    },
-    selectSomeBuyerCountries() {
-      return (
-        this.selectedBuyerCountry.length > 0 && !this.selectAllBuyerCountries
-      );
-    },
-    selectAllDealedCountries() {
-      return this.selectedDealedCountry.length === this.getDealedCountry.length;
-    },
-    selectSomeDealedCountries() {
-      return (
-        this.selectedDealedCountry.length > 0 && !this.selectAllDealedCountries
-      );
-    },
-    selectAllRegions() {
-      return this.selectedRegion.length === this.getRegion.length;
-    },
-    selectSomeRegions() {
-      return this.selectedRegion.length > 0 && !this.selectAllRegions;
-    },
-    selectAllStates() {
-      return this.selectedState.length === this.getState.length;
-    },
-    selectSomeStates() {
-      return this.selectedState.length > 0 && !this.selectAllStates;
-    },
-
-    // Return the right icon for the Select All box
-    iconDealType() {
-      if (this.selectAllDealTypes) return "check_box";
-      if (this.selectSomeDealTypes) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconBuyerGroup() {
-      if (this.selectAllBuyerGroups) return "check_box";
-      if (this.selectSomeBuyerGroups) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconDealedSIC() {
-      if (this.selectAllDealedSICs) return "check_box";
-      if (this.selectSomeDealedSICs) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconBuyerCountry() {
-      if (this.selectAllBuyerCountries) return "check_box";
-      if (this.selectSomeBuyerCountries) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconDealedCountry() {
-      if (this.selectAllDealedCountries) return "check_box";
-      if (this.selectSomeDealedCountries) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconRegion() {
-      if (this.selectAllRegions) return "check_box";
-      if (this.selectSomeRegions) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-    iconState() {
-      if (this.selectAllStates) return "check_box";
-      if (this.selectSomeStates) return "indeterminate_check_box";
-      return "check_box_outline_blank";
-    },
-
-    // Custom pagination
-    pages() {
-      if (
-        this.pagination.rowsPerPage == null ||
-        this.pagination.totalItems == null
-      )
-        return 0;
-      return Math.ceil(
-        this.pagination.totalItems / this.pagination.rowsPerPage
-      );
-    }
-  },
   watch: {
     listPopup (val) {
       if (!val) return
 
-      setTimeout(() => (this.listPopup = false), 4000)
+      setTimeout(() => (this.listPopup = false), 3000)
     },
     dialog (val) { val || this.close() }    
   },

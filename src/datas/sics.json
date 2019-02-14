@@ -1,9 +1,30 @@
 [
-    { "id": 11, "name": "Agropecuária" },
-    { "id": 1100, "name": "Agropecuária" },
-    { "id": 1101, "name": "Agruicultura / Pecuária" },
-    { "id": 1102, "name": "Avicultura" },
-    { "id": 12, "name": "Mineração" },
-    { "id": 1200, "name": "Mineração" },
-    { "id": 1201, "name": "Extração de Ferro" }
-  ]
+  {
+    "id": 11,
+    "name": "Agropecuária"
+  },
+  {
+    "id": 1100,
+    "name": "Agropecuária"
+  },
+  {
+    "id": 1101,
+    "name": "Agruicultura / Pecuária"
+  },
+  {
+    "id": 1102,
+    "name": "Avicultura"
+  },
+  {
+    "id": 12,
+    "name": "Mineração"
+  },
+  {
+    "id": 1200,
+    "name": "Mineração"
+  },
+  {
+    "id": 1201,
+    "name": "Extração de Ferro"
+  }
+]
