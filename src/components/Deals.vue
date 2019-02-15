@@ -328,7 +328,10 @@
             {{ props.item.dealedCompany }}
             <p class="mb-0"><small style="color: rgba(0,0,0,.54)">{{ props.item.dealedCountry }}</small></p>
           </td>
-          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.region }}</td>
+          <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">
+            {{ props.item.region }}
+            <p class="mb-0"><small style="color: rgba(0,0,0,.54)">{{ props.item.state }}</small></p>
+          </td>
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-right">{{ props.item.dealValue }}</td>
           <td :class="{ dimmed: props.item.isDraft }" class="text-xs-left">{{ props.item.dealedSIC }}</td>
           <td class="justify-space-around layout px-0">
