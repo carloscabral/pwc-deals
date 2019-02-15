@@ -79,7 +79,7 @@
                     <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-flex>                
                   <v-flex xs12>
-                    <v-select :items="getDistinct('profile')" v-model="editedItem.profile" label="Setor que pertence"></v-select>
+                    <v-select :items="getDistinct('profile')" v-model="editedItem.profile" label="Perfil"></v-select>
                   </v-flex>
               </v-layout>
               </v-container>
